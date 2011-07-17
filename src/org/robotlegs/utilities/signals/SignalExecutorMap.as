@@ -80,8 +80,12 @@ package org.robotlegs.utilities.signals
         }
         private function createSignalClassInstance(signalClass:Class):ISignal
         {
-            var signal:ISignal = injector.instantiate(signalClass);
-            injector.mapValue(signalClass, signal);
+            var injectorForSignalInstance:IInjector = injector;
+            var signal:ISignal;
+            if(injector.hasMapping(IInjector))
+                injectorForSignalInstance = injector.getInstance(IInjector);
+            signal = injectorForSignalInstance.instantiate(signalClass);
+            injectorForSignalInstance.mapValue(signalClass, signal);
             signalClassMap[signalClass] = signal;
             return signal;
         }
